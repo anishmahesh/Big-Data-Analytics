@@ -53,12 +53,11 @@ csvWriter.writerow(lst)
 lst = []
 csvReader2 = csv.reader(open('filtered.csv', "rt"))
 for row in csvReader2:
-    lst = zerolistmaker(key_idx)
-    for col_name,index in col_headers.iteritems():
-         lst[key_dict[col_name+"_"+process_value(row[index])]] = 1
-    for col_name,v in cols_not_to_include.iteritems():
-         lst[key_dict[col_name]] = row[index] 
-    print(lst)
-    csvWriter.writerow(list)
-
-
+    lst2 = zerolistmaker(290)
+    if len(row)>5:
+        for col_name,index in col_headers.iteritems():
+            lst2[key_dict[col_name+"_"+process_value(row[index])]] = 1
+        for col_name,v in cols_not_to_include.iteritems():
+            lst2[key_dict[col_name]] = row[v] 
+    #print(lst2)
+    csvWriter.writerow(lst2)
