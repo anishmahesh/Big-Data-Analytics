@@ -85,7 +85,7 @@ public class AreaClassifierMapper extends Mapper<LongWritable, Text, LongWritabl
      * @returns Distance in Meters
      */
     public double distance(double lat1, double lat2, double lon1,
-                                  double lon2, double el1, double el2) {
+                           double lon2, double el1, double el2) {
 
         final int R = 6371; // Radius of the earth
 
