@@ -33,14 +33,14 @@ public class AreaClassifierMapper extends Mapper<LongWritable, Text, LongWritabl
 
         if (context.getCacheFiles() != null
                 && context.getCacheFiles().length > 0) {
-            if(words[1] != 'Latitude') {
                 BufferedReader br = new BufferedReader(new FileReader(new File("./Zipcode_Lat_Long.csv")));
                 String line;
                 while ((line = br.readLine()) != null) {
                     String[] words = line.split(",");
-                    areas.add(new Area(words[0], Double.parseDouble(words[1]), Double.parseDouble(words[2])));
+                    if(!words[1].equals('Latitude')) {
+                        areas.add(new Area(words[0], Double.parseDouble(words[1]), Double.parseDouble(words[2])));
+                    }
                 }
-            }
         }
         super.setup(context);
     }
