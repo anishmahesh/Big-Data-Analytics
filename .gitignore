@@ -1,2 +1,6 @@
 .idea/
 *.iml
+*.csv
+*.class
+*.txt
+*.jar
