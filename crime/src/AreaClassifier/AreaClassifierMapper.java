@@ -49,11 +49,12 @@ public class AreaClassifierMapper extends Mapper<LongWritable, Text, LongWritabl
             throws IOException, InterruptedException {
 
         Map<String, Integer> indexMap = new LinkedHashMap<>();
-        indexMap.put("latitude", 469);
-        indexMap.put("longitude", 470);
 
         String line = value.toString();
         String[] vals = line.split(",");
+
+        indexMap.put("latitude", vals.length - 2);
+        indexMap.put("longitude", vals.length - 1);
 
         double lat = Double.parseDouble(vals[indexMap.get("latitude")]);
         double lon = Double.parseDouble(vals[indexMap.get("longitude")]);
