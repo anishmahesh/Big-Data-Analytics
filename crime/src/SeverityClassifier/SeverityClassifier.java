@@ -30,8 +30,8 @@ public class SeverityClassifier {
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);
 
-        job.addCacheFile(new URI("project/input/kycd_text.csv"));
-        job.addCacheFile(new URI("project/input/pdcd_text.csv"));
+        job.addCacheFile(new URI("project/input/kycd_text.txt"));
+        job.addCacheFile(new URI("project/input/pdcd_text.txt"));
 
         System.exit(job.waitForCompletion(true) ? 0 : 1);
     }
