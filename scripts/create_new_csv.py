@@ -1,6 +1,17 @@
 import csv
-import pickle
 
+read_file_name = '../../RTBDA/Unique_Values/FINAL_NYPD_Complaint_Data_Historic.csv'
+write_file_name = '../../RTBDA/Unique_Values/NEW_FINAL_NYPD_Complaint_Data_Historic.csv'
+csv_reader = csv.reader(open(read_file_name, "rt"))
+csv_writer = csv.writer(open(write_file_name,'w',newline=''))
+
+count = 0
+for row in csv_reader:
+    count += 1
+    if not count % 2 == 0:
+        csv_writer.writerow(row)
+
+'''
 latitude_Idx = 21
 longitude_Idx = 22
 
@@ -12,7 +23,7 @@ def getReadFile(readFileName):
     return csv.reader(open(readFileName, "rt"))
 
 def getWriteFile(writeFileName):
-    return csv.writer(open(writeFileName,'w'))
+    return csv.writer(open(writeFileName,'w',newline=''))
 
 
 def isRowIndexEmpty(row, rowList):
@@ -108,15 +119,15 @@ def create_new_csv(readFileName, writeFileName,rowList):
     #addPresenceAbsenceVal(csvReader2, csvWriter, key_dict, rowList)
 
 def main():
-    readFileName = '../RTBDA/NYPD_Complaint_Data_Historic.csv'
-    writeFileName = '../RTBDA/Unique_Values/VERBOSE_NYPD_Complaint_Data_Historic.csv'
+    readFileName = '../../RTBDA/NYPD_Complaint_Data_Historic.csv'
+    writeFileName = '../../RTBDA/Unique_Values/VERBOSE_NYPD_Complaint_Data_Historic.csv'
     rowList = [6,8,10,11]
     create_new_csv(readFileName, writeFileName, rowList)
 
 if __name__ == '__main__':
     main()
 
-
+'''
 
 
 

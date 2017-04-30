@@ -10,7 +10,7 @@ def getReadFile(readFileName):
     return csv.reader(open(readFileName, "rt"))
 
 def getWriteFile(writeFileName):
-    return csv.writer(open(writeFileName,'w'))
+    return csv.writer(open(writeFileName,'a'))
 
 
 def getZipCode(json_data):
@@ -35,15 +35,28 @@ def setColHeader(csv_writer):
     csv_writer.writerow(list)
 
 
+def rowsParsed():
+    read_file_name = '../../RTBDA/Unique_Values/Lat_Long_Zipcode.csv'
+    csv.reader(open(read_file_name, "rt"))
+    file_count = csv.reader(open(read_file_name, "rt"))
+    row_count = sum(1 for row in file_count)
+
+
+
 def makeGetCall(read_file_name, write_file_name):
+    #parsed_count = rowsParsed()
     csv_reader = getReadFile(read_file_name)
     csv_writer = getWriteFile(write_file_name)
     jumpFirstRow(csv_reader)
     url_elemantary = 'http://maps.google.com/maps/api/geocode/json?latlng='
     count = 0
     setColHeader(csv_writer)
+    row_count = 0
+    sel_row_count = 0
     for row in csv_reader:
+        row_count += 1
         if not row[lat_idx] == '' and not row[lat_idx] == '':
+            sel_row_count += 1
             list = []
             count += 1
             if count == 10:
@@ -58,12 +71,13 @@ def makeGetCall(read_file_name, write_file_name):
             list.append(row[lat_idx])
             list.append(row[long_idx])
             list.append(zip_code)
+            print(row_count - sel_row_count)
             csv_writer.writerow(list)
 
 
 def main():
-    read_file_name = '../RTBDA/NYPD_Complaint_Data_Historic.csv'
-    write_file_name = '../RTBDA/Unique_Values/Lat_Long_Zipcode.csv'
+    read_file_name = '../../RTBDA/NYPD_Complaint_Data_Historic.csv'
+    write_file_name = '../../RTBDA/Unique_Values/Lat_Long_Zipcode.csv'
     makeGetCall(read_file_name, write_file_name)
 
 if __name__ == '__main__':
