@@ -32,8 +32,8 @@ public class SeverityClassifierMapper extends Mapper<LongWritable, Text, LongWri
 
         if (context.getCacheFiles() != null
                 && context.getCacheFiles().length > 0) {
-            BufferedReader br = new BufferedReader(new FileReader(new File("./kycd_values.txt")));
-            createDictionaryFromFile(br, public_key_to_val);
+            //BufferedReader br = new BufferedReader(new FileReader(new File("./kycd_values.txt")));
+            //createDictionaryFromFile(br, public_key_to_val);
 
             BufferedReader br1 = new BufferedReader(new FileReader(new File("./pdcd_values.txt")));
             createDictionaryFromFile(br1, police_key_to_val);
@@ -56,6 +56,7 @@ public class SeverityClassifierMapper extends Mapper<LongWritable, Text, LongWri
         StringBuilder sb = new StringBuilder("");
         String line = value.toString();
         String[] vals = line.split(",");
+        /*
         int intVals = 0;
         for(int i=publicStartIdx; i<=publicEndIdx; i++){
             vals[i] = processString(vals[i]);
@@ -76,6 +77,7 @@ public class SeverityClassifierMapper extends Mapper<LongWritable, Text, LongWri
             sb.append("0,");
         }
 
+*/
         intVals = -1;
         for(int i=policeStartIdx; i<=policeEndIdx; i++){
             vals[i] = processString(vals[i]);
