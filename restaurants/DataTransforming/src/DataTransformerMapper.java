@@ -45,6 +45,9 @@ public class DataTransformerMapper
         String csvRow = "";
         String separator = ",";
 
+        if (vals[0].contains(","))
+            vals[0] = vals[0].replace(',', '/');
+
         csvRow += vals[0] + separator + vals[1];
 
         for (String cuisine: cuisineMapping.keySet()) {
