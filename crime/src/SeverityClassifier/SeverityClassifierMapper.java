@@ -126,7 +126,7 @@ public class SeverityClassifierMapper extends Mapper<LongWritable, Text, LongWri
         }
     }
 
-    public void processString(String s){
+    public String processString(String s){
         return s.replace(" ","");
     }
 
