@@ -49,8 +49,6 @@ public class AreaClassifierMapper extends Mapper<LongWritable, Text, LongWritabl
     public void map(LongWritable key, Text value, Context context)
             throws IOException, InterruptedException {
 
-        if(key.get() == 0) return;
-
         Map<String, Integer> indexMap = new LinkedHashMap<>();
 
         String line = value.toString();

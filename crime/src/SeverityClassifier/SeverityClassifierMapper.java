@@ -56,7 +56,7 @@ public class SeverityClassifierMapper extends Mapper<LongWritable, Text, LongWri
         StringBuilder sb = new StringBuilder("");
         String line = value.toString();
         String[] vals = line.split(",");
-        int intVals = -1;
+        int intVals = 0;
         for(int i=publicStartIdx; i<=publicEndIdx; i++){
             vals[i] = processString(vals[i]);
             intVals = Integer.parseInt(vals[i]);
@@ -71,7 +71,7 @@ public class SeverityClassifierMapper extends Mapper<LongWritable, Text, LongWri
                 break;
             }
         }
-        if(intVals == -1){
+        if(intVals != 1){
             sb.append("1,");
             sb.append("0,");
         }
@@ -92,7 +92,7 @@ public class SeverityClassifierMapper extends Mapper<LongWritable, Text, LongWri
             }
         }
 
-        if(intVals == -1){
+        if(intVals != -1){
             sb.append("0,");
             sb.append("1");
         }
