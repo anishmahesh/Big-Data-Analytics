@@ -106,7 +106,7 @@ public class SeverityClassifierMapper extends Mapper<LongWritable, Text, LongWri
         context.write(key, new Text(csvRow));
     }
 
-    public void addIndexesToSeverity(BufferedReader br, int start,int end,HashSet<Integer> severityOne,HashSet<Integer> severityTwo, HashMap<Integer,Integer> key_to_val){
+    public void addIndexesToSeverity(BufferedReader br, int start,int end,HashSet<Integer> severityOne,HashSet<Integer> severityTwo, HashMap<Integer,Integer> key_to_val) throws IOException, InterruptedException{
         String line;
         while ((line = br.readLine()) != null) {
             String[] vals = line.split(",");
