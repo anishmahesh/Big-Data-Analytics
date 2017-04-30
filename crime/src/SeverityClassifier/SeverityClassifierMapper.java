@@ -122,6 +122,8 @@ public class SeverityClassifierMapper extends Mapper<LongWritable, Text, LongWri
         String line;
         while ((line = br.readLine()) != null) {
             String[] words = line.split(",");
+            words[0] = processString(words[0]);
+            words[2] = processString(words[2]);
             key_to_val.put(Integer.parseInt(words[0]), Integer.parseInt(words[2]));
         }
     }
