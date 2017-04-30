@@ -56,6 +56,7 @@ public class SeverityClassifierMapper extends Mapper<LongWritable, Text, LongWri
             String[] vals = line.split(",");
             int intVals = -1;
             for(int i=publicStartIdx; i<=publicEndIdx; i++){
+                vals[i] = processString(vals[i]);
                 intVals = Integer.parseInt(vals[i]);
                 if(intVals == 1){
                     if(publicSeverityTwo.contains(intVals)){
@@ -75,6 +76,7 @@ public class SeverityClassifierMapper extends Mapper<LongWritable, Text, LongWri
 
             intVals = -1;
             for(int i=policeStartIdx; i<=policeEndIdx; i++){
+                vals[i] = processString(vals[i]);
                 intVals = Integer.parseInt(vals[i]);
                 if(intVals == 1){
                     if(policeSeverityTwo.contains(intVals)){
@@ -104,6 +106,7 @@ public class SeverityClassifierMapper extends Mapper<LongWritable, Text, LongWri
 
     public void addIndexesToSeverity(int start,int end,HashSet<Integer> severityOne,HashSet<Integer> severityTwo, String[] vals, HashMap<Integer,Integer> key_to_val){
         for(int i = start; i <= end; i++){
+            vals[i] = processString(vals[i]);
             int intVals = Integer.parseInt(vals[i]);
             if(key_to_val.containsKey(intVals)){
                 if(key_to_val.get(intVals) >=3){
@@ -121,6 +124,10 @@ public class SeverityClassifierMapper extends Mapper<LongWritable, Text, LongWri
             String[] words = line.split(",");
             key_to_val.put(Integer.parseInt(words[0]), Integer.parseInt(words[2]));
         }
+    }
+
+    public void processString(String s){
+        return s.replace(" ","");
     }
 
 }
