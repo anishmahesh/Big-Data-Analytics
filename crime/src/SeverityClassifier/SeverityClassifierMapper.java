@@ -115,7 +115,7 @@ public class SeverityClassifierMapper extends Mapper<LongWritable, Text, LongWri
         }
     }
 
-    public void createDictionaryFromFile(BufferedReader br, HashMap<Integer,Integer> key_to_val){
+    public void createDictionaryFromFile(BufferedReader br, HashMap<Integer,Integer> key_to_val) throws IOException, InterruptedException{
         String line;
         while ((line = br.readLine()) != null) {
             String[] words = line.split(",");
