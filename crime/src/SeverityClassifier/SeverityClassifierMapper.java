@@ -15,6 +15,15 @@ public class SeverityClassifierMapper extends Mapper<LongWritable, Text, LongWri
 
     HashMap<Integer,Integer> public_key_to_val = new HashMap<>();
     HashMap<Integer,Integer> police_key_to_val = new HashMap<>();
+    HashSet<Integer> publicSeverityOne = new HashSet<>();
+    HashSet<Integer> publicSeverityTwo = new HashSet<>();
+    int publicStartIdx = 0;
+    int publicEndIdx = 71;
+
+    HashSet<Integer> policeSeverityOne = new HashSet<>();
+    HashSet<Integer> policeSeverityTwo = new HashSet<>();
+    int policeStartIdx = 72;
+    int policeEndIdx = 463;
 
     @Override
     protected void setup(Context context) throws IOException, InterruptedException
@@ -28,6 +37,12 @@ public class SeverityClassifierMapper extends Mapper<LongWritable, Text, LongWri
 
             BufferedReader br1 = new BufferedReader(new FileReader(new File("./pdcd_values.txt")));
             createDictionaryFromFile(br1, police_key_to_val);
+
+            BufferedReader br3 = new BufferedReader(new FileReader(new File("./Column_Header.csv")));
+            addIndexesToSeverity(br3,publicStartIdx, publicEndIdx, publicSeverityOne, publicSeverityTwo, vals, public_key_to_val);
+
+            BufferedReader br2 = new BufferedReader(new FileReader(new File("./Column_Header.csv")));
+            addIndexesToSeverity(br2,policeStartIdx, policeEndIdx, policeSeverityOne, policeSeverityTwo, vals, police_key_to_val);
         }
         super.setup(context);
     }
@@ -35,85 +50,75 @@ public class SeverityClassifierMapper extends Mapper<LongWritable, Text, LongWri
     @Override
     public void map(LongWritable key, Text value, Context context)
             throws IOException, InterruptedException {
-        HashSet<Integer> publicSeverityOne = new HashSet<>();
-        HashSet<Integer> publicSeverityTwo = new HashSet<>();
-        int publicStartIdx = 0;
-        int publicEndIdx = 71;
 
-        HashSet<Integer> policeSeverityOne = new HashSet<>();
-        HashSet<Integer> policeSeverityTwo = new HashSet<>();
-        int policeStartIdx = 72;
-        int policeEndIdx = 463;
+        if(key.get() == 0) return;
 
-        if(key.get() == 0){
-            String line = value.toString();
-            String[] vals = line.split(",");
-            addIndexesToSeverity(publicStartIdx, publicEndIdx, publicSeverityOne, publicSeverityTwo, vals, public_key_to_val);
-            addIndexesToSeverity(policeStartIdx, policeEndIdx, policeSeverityOne, policeSeverityTwo, vals, police_key_to_val);
-        } else {
-            StringBuilder sb = new StringBuilder("");
-            String line = value.toString();
-            String[] vals = line.split(",");
-            int intVals = -1;
-            for(int i=publicStartIdx; i<=publicEndIdx; i++){
-                vals[i] = processString(vals[i]);
-                intVals = Integer.parseInt(vals[i]);
-                if(intVals == 1){
-                    if(publicSeverityTwo.contains(intVals)){
-                        sb.append("0,");
-                        sb.append("1,");
-                    } else {
-                        sb.append("1,");
-                        sb.append("0,");
-                    }
-                    break;
+        StringBuilder sb = new StringBuilder("");
+        String line = value.toString();
+        String[] vals = line.split(",");
+        int intVals = -1;
+        for(int i=publicStartIdx; i<=publicEndIdx; i++){
+            vals[i] = processString(vals[i]);
+            intVals = Integer.parseInt(vals[i]);
+            if(intVals == 1){
+                if(publicSeverityTwo.contains(i)){
+                    sb.append("0,");
+                    sb.append("1,");
+                } else {
+                    sb.append("1,");
+                    sb.append("0,");
                 }
+                break;
             }
-            if(intVals == -1){
-                sb.append("0,");
-                sb.append("1.");
-            }
-
-            intVals = -1;
-            for(int i=policeStartIdx; i<=policeEndIdx; i++){
-                vals[i] = processString(vals[i]);
-                intVals = Integer.parseInt(vals[i]);
-                if(intVals == 1){
-                    if(policeSeverityTwo.contains(intVals)){
-                        sb.append("0,");
-                        sb.append("1");
-                    } else {
-                        sb.append("1,");
-                        sb.append("0");
-                    }
-                    break;
-                }
-            }
-
-            if(intVals == -1){
-                sb.append("0,");
-                sb.append("1");
-            }
-
-            for(int i = policeEndIdx+1; i < vals.length; i++){
-                sb.append(",");
-                sb.append(vals[i]);
-            }
-            String csvRow = sb.toString();
-
-            context.write(key, new Text(csvRow));
         }
+        if(intVals == -1){
+            sb.append("1,");
+            sb.append("0,");
+        }
+
+        intVals = -1;
+        for(int i=policeStartIdx; i<=policeEndIdx; i++){
+            vals[i] = processString(vals[i]);
+            intVals = Integer.parseInt(vals[i]);
+            if(intVals == 1){
+                if(policeSeverityTwo.contains(i)){
+                    sb.append("0,");
+                    sb.append("1");
+                } else {
+                    sb.append("1,");
+                    sb.append("0");
+                }
+                break;
+            }
+        }
+
+        if(intVals == -1){
+            sb.append("0,");
+            sb.append("1");
+        }
+
+        for(int i = vals.length - 7; i < vals.length; i++){
+            sb.append(",");
+            sb.append(vals[i]);
+        }
+        String csvRow = sb.toString();
+
+        context.write(key, new Text(csvRow));
     }
 
-    public void addIndexesToSeverity(int start,int end,HashSet<Integer> severityOne,HashSet<Integer> severityTwo, String[] vals, HashMap<Integer,Integer> key_to_val){
-        for(int i = start; i <= end; i++){
-            vals[i] = processString(vals[i]);
-            int intVals = Integer.parseInt(vals[i]);
-            if(key_to_val.containsKey(intVals)){
-                if(key_to_val.get(intVals) >=3){
-                    severityTwo.add(intVals);
-                } else {
-                    severityOne.add(intVals);
+    public void addIndexesToSeverity(BufferedReader br, int start,int end,HashSet<Integer> severityOne,HashSet<Integer> severityTwo, String[] vals, HashMap<Integer,Integer> key_to_val){
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] words = line.split(",");
+            for (int i = start; i <= end; i++) {
+                vals[i] = processString(vals[i]);
+                int intVals = Integer.parseInt(vals[i]);
+                if (key_to_val.containsKey(intVals)) {
+                    if (key_to_val.get(intVals) >= 3) {
+                        severityTwo.add(i);
+                    } else {
+                        severityOne.add(i);
+                    }
                 }
             }
         }
