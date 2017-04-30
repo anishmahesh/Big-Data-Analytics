@@ -60,18 +60,18 @@ public class SeverityClassifierMapper extends Mapper<LongWritable, Text, LongWri
                 intVals = Integer.parseInt(vals[i]);
                 if(intVals == 1){
                     if(publicSeverityTwo.contains(intVals)){
-                        sb.append("0");
-                        sb.append("1");
+                        sb.append("0,");
+                        sb.append("1,");
                     } else {
-                        sb.append("1");
-                        sb.append("0");
+                        sb.append("1,");
+                        sb.append("0,");
                     }
                     break;
                 }
             }
             if(intVals == -1){
-                sb.append("0");
-                sb.append("1");
+                sb.append("0,");
+                sb.append("1.");
             }
 
             intVals = -1;
@@ -80,10 +80,10 @@ public class SeverityClassifierMapper extends Mapper<LongWritable, Text, LongWri
                 intVals = Integer.parseInt(vals[i]);
                 if(intVals == 1){
                     if(policeSeverityTwo.contains(intVals)){
-                        sb.append("0");
+                        sb.append("0,");
                         sb.append("1");
                     } else {
-                        sb.append("1");
+                        sb.append("1,");
                         sb.append("0");
                     }
                     break;
@@ -91,11 +91,12 @@ public class SeverityClassifierMapper extends Mapper<LongWritable, Text, LongWri
             }
 
             if(intVals == -1){
-                sb.append("0");
+                sb.append("0,");
                 sb.append("1");
             }
 
             for(int i = policeEndIdx+1; i < vals.length; i++){
+                sb.append(",");
                 sb.append(vals[i]);
             }
             String csvRow = sb.toString();
