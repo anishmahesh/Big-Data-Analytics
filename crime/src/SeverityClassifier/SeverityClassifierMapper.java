@@ -39,10 +39,10 @@ public class SeverityClassifierMapper extends Mapper<LongWritable, Text, LongWri
             createDictionaryFromFile(br1, police_key_to_val);
 
             BufferedReader br3 = new BufferedReader(new FileReader(new File("./Column_Header.csv")));
-            addIndexesToSeverity(br3,publicStartIdx, publicEndIdx, publicSeverityOne, publicSeverityTwo, vals, public_key_to_val);
+            addIndexesToSeverity(br3,publicStartIdx, publicEndIdx, publicSeverityOne, publicSeverityTwo, public_key_to_val);
 
             BufferedReader br2 = new BufferedReader(new FileReader(new File("./Column_Header.csv")));
-            addIndexesToSeverity(br2,policeStartIdx, policeEndIdx, policeSeverityOne, policeSeverityTwo, vals, police_key_to_val);
+            addIndexesToSeverity(br2,policeStartIdx, policeEndIdx, policeSeverityOne, policeSeverityTwo, police_key_to_val);
         }
         super.setup(context);
     }
@@ -106,10 +106,10 @@ public class SeverityClassifierMapper extends Mapper<LongWritable, Text, LongWri
         context.write(key, new Text(csvRow));
     }
 
-    public void addIndexesToSeverity(BufferedReader br, int start,int end,HashSet<Integer> severityOne,HashSet<Integer> severityTwo, String[] vals, HashMap<Integer,Integer> key_to_val){
+    public void addIndexesToSeverity(BufferedReader br, int start,int end,HashSet<Integer> severityOne,HashSet<Integer> severityTwo, HashMap<Integer,Integer> key_to_val){
         String line;
         while ((line = br.readLine()) != null) {
-            String[] words = line.split(",");
+            String[] vals = line.split(",");
             for (int i = start; i <= end; i++) {
                 vals[i] = processString(vals[i]);
                 int intVals = Integer.parseInt(vals[i]);
