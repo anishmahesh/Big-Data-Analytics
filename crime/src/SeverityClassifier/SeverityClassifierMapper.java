@@ -92,7 +92,7 @@ public class SeverityClassifierMapper extends Mapper<LongWritable, Text, LongWri
             }
         }
 
-        if(intVals != -1){
+        if(intVals != 1){
             sb.append("0,");
             sb.append("1");
         }
