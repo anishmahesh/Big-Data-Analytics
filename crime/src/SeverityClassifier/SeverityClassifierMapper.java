@@ -48,8 +48,8 @@ public class SeverityClassifierMapper extends Mapper<LongWritable, Text, LongWri
         if(key.get() == 0){
             String line = value.toString();
             String[] vals = line.split(",");
-            addIndexesToSeverity(publicStartIdx, publicEndIdx, publicSeverityOne, publicSeverityTwo, vals);
-            addIndexesToSeverity(policeStartIdx, policeEndIdx, policeSeverityOne, policeSeverityTwo, vals);
+            addIndexesToSeverity(publicStartIdx, publicEndIdx, publicSeverityOne, publicSeverityTwo, vals, public_key_to_val);
+            addIndexesToSeverity(policeStartIdx, policeEndIdx, policeSeverityOne, policeSeverityTwo, vals, police_key_to_val);
         } else {
             StringBuilder sb = new StringBuilder("");
             String line = value.toString();
@@ -102,11 +102,11 @@ public class SeverityClassifierMapper extends Mapper<LongWritable, Text, LongWri
         }
     }
 
-    public void addIndexesToSeverity(int start,int end,HashSet<Integer> severityOne,HashSet<Integer> severityTwo,Strings[] vals){
+    public void addIndexesToSeverity(int start,int end,HashSet<Integer> severityOne,HashSet<Integer> severityTwo, String[] vals, HashMap<Integer,Integer> key_to_val){
         for(int i = start; i <= end; i++){
             int intVals = Integer.parseInt(vals[i]);
-            if(public_key_to_val.contains(intVals)){
-                if(public_key_to_val.get(intVals) >=3){
+            if(key_to_val.containsKey(intVals)){
+                if(key_to_val.get(intVals) >=3){
                     severityTwo.add(intVals);
                 } else {
                     severityOne.add(intVals);
