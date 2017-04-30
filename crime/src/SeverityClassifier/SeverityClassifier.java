@@ -32,6 +32,7 @@ public class SeverityClassifier {
 
         job.addCacheFile(new URI("project/input/kycd_values.txt"));
         job.addCacheFile(new URI("project/input/pdcd_values.txt"));
+        job.addCacheFile(new URI("project/input/Column_Header.csv"));
 
         System.exit(job.waitForCompletion(true) ? 0 : 1);
     }
