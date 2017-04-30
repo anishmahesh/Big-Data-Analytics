@@ -7,7 +7,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 /**
  * Created by anish on 4/25/17.
  */
-public class AreaClassifierReducer extends Reducer<LongWritable, Text, Text, Text> {
+public class SeverityClassifierReducer extends Reducer<LongWritable, Text, Text, Text> {
 
     @Override
     public void reduce(LongWritable key, Iterable<Text> values, Context context)

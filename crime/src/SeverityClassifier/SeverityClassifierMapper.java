@@ -10,21 +10,11 @@ import org.apache.hadoop.filecache.DistributedCache;
 /**
  * Created by anish on 4/25/17.
  */
-public class AreaClassifierMapper extends Mapper<LongWritable, Text, LongWritable, Text> {
+public class SeverityClassifierMapper extends Mapper<LongWritable, Text, LongWritable, Text> {
 
-    class Area {
-        String name;
-        double latitude;
-        double longitude;
 
-        public Area(String name, double latitude, double longitude) {
-            this.name = name;
-            this.latitude = latitude;
-            this.longitude = longitude;
-        }
-    }
-
-    List<Area> areas = new ArrayList<>();
+    HashMap<Integer,Integer> public_key_to_val = new HashMap<>();
+    HashMap<Integer,Integer> police_key_to_val = new HashMap<>();
 
     @Override
     protected void setup(Context context) throws IOException, InterruptedException
@@ -33,14 +23,11 @@ public class AreaClassifierMapper extends Mapper<LongWritable, Text, LongWritabl
 
         if (context.getCacheFiles() != null
                 && context.getCacheFiles().length > 0) {
+            BufferedReader br = new BufferedReader(new FileReader(new File("./kycd_values.txt")));
+            createDictionaryFromFile(br, public_key_to_val);
 
-            BufferedReader br = new BufferedReader(new FileReader(new File("./AreaCentroid.csv")));
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] words = line.split(",");
-                areas.add(new Area(words[0], Double.parseDouble(words[1]), Double.parseDouble(words[2])));
-            }
-
+            BufferedReader br1 = new BufferedReader(new FileReader(new File("./pdcd_values.txt")));
+            createDictionaryFromFile(br1, police_key_to_val);
         }
         super.setup(context);
     }
@@ -48,59 +35,92 @@ public class AreaClassifierMapper extends Mapper<LongWritable, Text, LongWritabl
     @Override
     public void map(LongWritable key, Text value, Context context)
             throws IOException, InterruptedException {
+        HashSet<Integer> publicSeverityOne = new HashSet<>();
+        HashSet<Integer> publicSeverityTwo = new HashSet<>();
+        int publicStartIdx = 0;
+        int publicEndIdx = 71;
 
-        Map<String, Integer> indexMap = new LinkedHashMap<>();
-        indexMap.put("latitude", 6);
-        indexMap.put("longitude", 7);
+        HashSet<Integer> policeSeverityOne = new HashSet<>();
+        HashSet<Integer> policeSeverityTwo = new HashSet<>();
+        int policeStartIdx = 72;
+        int policeEndIdx = 463;
 
-        String line = value.toString();
-        String[] vals = line.split(",");
+        if(key.get() == 0){
+            String line = value.toString();
+            String[] vals = line.split(",");
+            addIndexesToSeverity(publicStartIdx, publicEndIdx, publicSeverityOne, publicSeverityTwo, vals);
+            addIndexesToSeverity(policeStartIdx, policeEndIdx, policeSeverityOne, policeSeverityTwo, vals);
+        } else {
+            StringBuilder sb = new StringBuilder("");
+            String line = value.toString();
+            String[] vals = line.split(",");
+            int intVals = -1;
+            for(int i=publicStartIdx; i<=publicEndIdx; i++){
+                intVals = Integer.parseInt(vals[i]);
+                if(intVals == 1){
+                    if(publicSeverityTwo.contains(intVals)){
+                        sb.append("0");
+                        sb.append("1");
+                    } else {
+                        sb.append("1");
+                        sb.append("0");
+                    }
+                    break;
+                }
+            }
+            if(intVals == -1){
+                sb.append("0");
+                sb.append("1");
+            }
 
-        double lat = Double.parseDouble(vals[indexMap.get("latitude")]);
-        double lon = Double.parseDouble(vals[indexMap.get("longitude")]);
+            intVals = -1;
+            for(int i=policeStartIdx; i<=policeEndIdx; i++){
+                intVals = Integer.parseInt(vals[i]);
+                if(intVals == 1){
+                    if(policeSeverityTwo.contains(intVals)){
+                        sb.append("0");
+                        sb.append("1");
+                    } else {
+                        sb.append("1");
+                        sb.append("0");
+                    }
+                    break;
+                }
+            }
 
+            if(intVals == -1){
+                sb.append("0");
+                sb.append("1");
+            }
 
-        double min = Double.MAX_VALUE;
-        String closestArea = areas.get(0).name;
-        for (Area a: areas) {
-            double dist = distance(lat, a.latitude, lon, a.longitude, 0, 0);
-            if (dist <= min) {
-                min = dist;
-                closestArea = a.name;
+            for(int i = policeEndIdx+1; i < vals.length; i++){
+                sb.append(vals[i]);
+            }
+            String csvRow = sb.toString();
+
+            context.write(key, new Text(csvRow));
+        }
+    }
+
+    public void addIndexesToSeverity(int start,int end,HashSet<Integer> severityOne,HashSet<Integer> severityTwo,Strings[] vals){
+        for(int i = start; i <= end; i++){
+            int intVals = Integer.parseInt(vals[i]);
+            if(public_key_to_val.contains(intVals)){
+                if(public_key_to_val.get(intVals) >=3){
+                    severityTwo.add(intVals);
+                } else {
+                    severityOne.add(intVals);
+                }
             }
         }
-
-        String csvRow = closestArea + "," + line;
-
-        context.write(key, new Text(csvRow));
     }
 
-    /**
-     * Calculate distance between two points in latitude and longitude taking
-     * into account height difference. If you are not interested in height
-     * difference pass 0.0. Uses Haversine method as its base.
-     *
-     * lat1, lon1 Start point lat2, lon2 End point el1 Start altitude in meters
-     * el2 End altitude in meters
-     * @returns Distance in Meters
-     */
-    public double distance(double lat1, double lat2, double lon1,
-                           double lon2, double el1, double el2) {
-
-        final int R = 6371; // Radius of the earth
-
-        double latDistance = Math.toRadians(lat2 - lat1);
-        double lonDistance = Math.toRadians(lon2 - lon1);
-        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
-                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
-                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        double distance = R * c * 1000; // convert to meters
-
-        double height = el1 - el2;
-
-        distance = Math.pow(distance, 2) + Math.pow(height, 2);
-
-        return Math.sqrt(distance);
+    public void createDictionaryFromFile(BufferedReader br, HashMap<Integer,Integer> key_to_val){
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] words = line.split(",");
+            key_to_val.put(Integer.parseInt(words[0]), Integer.parseInt(words[2]));
+        }
     }
+
 }

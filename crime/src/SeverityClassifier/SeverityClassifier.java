@@ -10,27 +10,28 @@ import java.net.URI;
 /**
  * Created by anish on 4/25/17.
  */
-public class AreaClassifier {
+public class SeverityClassifier {
     public static void main(String[] args) throws Exception {
         if (args.length != 2) {
-            System.err.println("Usage: AreaClassifier <input path> <output path>");
+            System.err.println("Usage: SeverityClassifier <input path> <output path>");
             System.exit(-1);
         }
 
         Job job = new Job();
-        job.setJarByClass(AreaClassifier.class);
+        job.setJarByClass(SeverityClassifier.class);
         job.setJobName("Severity Classification");
         FileInputFormat.addInputPath(job, new Path(args[0]));
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
-        job.setMapperClass(AreaClassifierMapper.class);
-        job.setReducerClass(AreaClassifierReducer.class);
+        job.setMapperClass(SeverityClassifierMapper.class);
+        job.setReducerClass(SeverityClassifierReducer.class);
         job.setMapOutputKeyClass(LongWritable.class);
         job.setMapOutputValueClass(Text.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);
 
-        job.addCacheFile(new URI("rbda/area/input/AreaCentroid.csv"));
+        job.addCacheFile(new URI("project/input/kycd_text.csv"));
+        job.addCacheFile(new URI("project/input/pdcd_text.csv"));
 
         System.exit(job.waitForCompletion(true) ? 0 : 1);
     }
