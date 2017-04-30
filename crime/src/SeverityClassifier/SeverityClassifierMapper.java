@@ -77,7 +77,7 @@ public class SeverityClassifierMapper extends Mapper<LongWritable, Text, LongWri
             sb.append("0,");
         }
 
-*/
+
         intVals = -1;
         for(int i=policeStartIdx; i<=policeEndIdx; i++){
             vals[i] = processString(vals[i]);
@@ -98,6 +98,7 @@ public class SeverityClassifierMapper extends Mapper<LongWritable, Text, LongWri
             sb.append("0,");
             sb.append("1");
         }
+        */
 
         for(int i = vals.length - 7; i < vals.length; i++){
             sb.append(",");
