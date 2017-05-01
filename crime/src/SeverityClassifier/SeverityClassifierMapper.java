@@ -56,8 +56,8 @@ public class SeverityClassifierMapper extends Mapper<LongWritable, Text, LongWri
         StringBuilder sb = new StringBuilder("");
         String line = value.toString();
         String[] vals = line.split(",");
-        /*
         int intVals = 0;
+        /*
         for(int i=publicStartIdx; i<=publicEndIdx; i++){
             vals[i] = processString(vals[i]);
             intVals = Integer.parseInt(vals[i]);
