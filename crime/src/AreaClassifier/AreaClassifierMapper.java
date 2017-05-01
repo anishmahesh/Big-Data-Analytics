@@ -37,7 +37,7 @@ public class AreaClassifierMapper extends Mapper<LongWritable, Text, LongWritabl
                 String line;
                 while ((line = br.readLine()) != null) {
                     String[] words = line.split(",");
-                    if(!words[1].equals('Latitude')) {
+                    if(!words[1].equals("Latitude")) {
                         areas.add(new Area(words[0], Double.parseDouble(words[1]), Double.parseDouble(words[2])));
                     }
                 }
