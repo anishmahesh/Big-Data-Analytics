@@ -6,7 +6,9 @@ spark = SparkSession\
     .appName("LinearRegression")\
     .getOrCreate()
 
-spark.sparkContext.setLogLevel('ERROR')
+logger = spark.sparkContext._jvm.org.apache.log4j
+logger.LogManager.getLogger("org").setLevel( logger.Level.OFF )
+logger.LogManager.getLogger("akka").setLevel( logger.Level.OFF )
 
 training = spark.read.format("libsvm").load('spark_ex_data/input/rbda_data.txt')
 train, test = training.randomSplit([0.9, 0.1])
