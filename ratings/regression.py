@@ -26,4 +26,4 @@ print("Test RMSE: %f" % rmse)
 
 pr = prediction.rdd.map(lambda r: (r[0], r[2])).collect()
 for p in pr:
-    print(p[0],p[2])
+    print(p[0],p[1])
