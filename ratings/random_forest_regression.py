@@ -41,7 +41,7 @@ if __name__ == "__main__":
     rmse = evaluator.evaluate(prediction)
     print("Root Mean Squared Error (RMSE) on test data = %g" % rmse)
 
-    pr = prediction.rdd.map(lambda r: (r[0], r[2])).collect()
+    pr = prediction.rdd.map(lambda r: (r[1], r[0])).collect()
     diff_count = 0
     border_count = 0
     for p in pr:
