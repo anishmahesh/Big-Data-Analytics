@@ -58,3 +58,4 @@ if __name__ == "__main__":
 
     rfModel = model.stages[1]
     print(rfModel)  # summary only
+    print(rfModel.featureImportances)
