@@ -1,4 +1,10 @@
 from pyspark.ml.regression import LinearRegression
+from pyspark.sql import SparkSession
+
+spark = SparkSession\
+    .builder\
+    .appName("LinearRegression")\
+    .getOrCreate()
 
 training = spark.read.format("libsvm").load('spark_ex_data/input/rbda_data.txt')
 train, test = training.randomSplit([0.9, 0.1])
