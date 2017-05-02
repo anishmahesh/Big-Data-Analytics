@@ -33,12 +33,12 @@ if __name__ == "__main__":
     model = pipeline.fit(trainingData)
 
     # Make predictions.
-    predictions = model.transform(testData)
+    prediction = model.transform(testData)
 
     # Select (prediction, true label) and compute test error
     evaluator = RegressionEvaluator(
         labelCol="label", predictionCol="prediction", metricName="rmse")
-    rmse = evaluator.evaluate(predictions)
+    rmse = evaluator.evaluate(prediction)
     print("Root Mean Squared Error (RMSE) on test data = %g" % rmse)
 
     pr = prediction.rdd.map(lambda r: (r[0], r[2])).collect()
