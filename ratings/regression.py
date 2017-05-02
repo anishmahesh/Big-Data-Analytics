@@ -22,8 +22,14 @@ prediction.describe().show()
 
 rmse = prediction.rdd.map(lambda r: ((r[0] - r[2])**2)).mean()**.5
 
-print("Test RMSE: %f" % rmse)
+print("Test RMSE: %f\n" % rmse)
 
 pr = prediction.rdd.map(lambda r: (r[0], r[2])).collect()
+diff_count = 0
 for p in pr:
-    print(p[0],p[1])
+    label_grade = 'A' if p[0] < 14 else ('B' if p[0] < 28 else 'C')
+    pred_grade = 'A' if p[1] < 14 else ('B' if p[1] < 28 else 'C')
+    diff_count += 1 if not label_grade == pred_grade else 0
+    print(p[0],p[1],'\t',label_grade,pred_grade)
+
+print('\nNo. of incorrect grade predictions: %d' % diff_count)
