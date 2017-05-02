@@ -32,7 +32,7 @@ for p in pr:
     pred_grade = 'A' if p[1] < 14 else ('B' if p[1] < 28 else 'C')
     diff_count += 1 if not label_grade == pred_grade else 0
     if not label_grade == pred_grade:
-        if (26 <= label_grade <= 30 and abs(label_grade - pred_grade) <= 4) or (12 <= label_grade <= 16 and abs(label_grade - pred_grade <= 4)):
+        if (26 <= p[0] <= 30 and abs(p[0] - p[1]) <= 4) or (12 <= p[0] <= 16 and abs(p[0] - p[1] <= 4)):
             border_count += 1
     print((str(p[0]) + ' ' + str(p[1]) + '\t' + label_grade + ' ' + pred_grade).expandtabs(5))
 
