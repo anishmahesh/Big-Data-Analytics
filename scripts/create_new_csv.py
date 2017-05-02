@@ -5,13 +5,14 @@ write_file_name = '../../RTBDA/Unique_Values/NEW_FINAL_NYPD_Complaint_Data_Histo
 csv_reader = csv.reader(open(read_file_name, "rt"))
 csv_writer = csv.writer(open(write_file_name,'w',newline=''))
 
+'''
 count = 0
 for row in csv_reader:
     count += 1
     if not count % 2 == 0:
         csv_writer.writerow(row)
-
 '''
+
 latitude_Idx = 21
 longitude_Idx = 22
 
@@ -127,7 +128,6 @@ def main():
 if __name__ == '__main__':
     main()
 
-'''
 
 
 
