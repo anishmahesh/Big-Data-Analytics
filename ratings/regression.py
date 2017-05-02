@@ -34,7 +34,7 @@ for p in pr:
     if not label_grade == pred_grade:
         if (26 <= label_grade <= 30 and abs(label_grade - pred_grade) <= 4) or (12 <= label_grade <= 16 and abs(label_grade - pred_grade <= 4)):
             border_count += 1
-    print(p[0],p[1],'\t',label_grade,pred_grade)
+    print(p[0],p[1],'\t',label_grade,pred_grade).expandtabs(5)
 
 print('\nNo. of incorrect grade predictions: %d' % diff_count)
 print('No. of border cases: %d' % border_count)
