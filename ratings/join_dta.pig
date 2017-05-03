@@ -52,3 +52,5 @@ STORE merged_cab_final INTO 'final_cab' USING PigStorage(',');
 /*
     All Datasets merge
  */
+merged_final = JOIN merged_1 by $0, merged_cab_final by $0;
+merged_cab_final = FOREACH merged_final GENERATE $0,FLATTEN($1);
