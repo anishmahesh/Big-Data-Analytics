@@ -11,7 +11,7 @@ spark = SparkSession\
 spark.sparkContext.setLogLevel('ERROR')
 
 label_col = 'score'
-cols_to_keep = ['crime_sev1','crime_sev2','crime_attempted','crime_completed','violation','misdemeanor','felony','311_sev1','311_sev2','311_sev3','311_sev4','taxi1','taxi2','taxi3','name','american','asian','continental','indian','italian','mexican','middle_eastern','vio_facilities','vio_food_handling','vio_hygiene','vio_vermin','total_violations','critical_violations']
+cols_to_keep = ['crime_sev1','crime_sev2','crime_attempted','crime_completed','violation','misdemeanor','felony','311_sev1','311_sev2','311_sev3','311_sev4','american','asian','continental','indian','italian','mexican','middle_eastern','vio_facilities','vio_food_handling','vio_hygiene','vio_vermin','total_violations','critical_violations']
 
 df = spark.read.csv('spark_ex_data/input/FinalMerged.csv', header=True)
 df = df.select(col(label_col).alias('label'), *cols_to_keep)
