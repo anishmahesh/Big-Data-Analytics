@@ -3,6 +3,8 @@ from pyspark.ml.regression import RandomForestRegressor
 from pyspark.ml.feature import VectorIndexer
 from pyspark.ml.evaluation import RegressionEvaluator
 from pyspark.sql import SparkSession
+from pyspark.ml.feature import VectorAssembler
+from pyspark.sql.functions import col
 
 if __name__ == "__main__":
     spark = SparkSession \
@@ -12,8 +14,14 @@ if __name__ == "__main__":
 
     spark.sparkContext.setLogLevel('ERROR')
 
-    # Load and parse the data file, converting it to a DataFrame.
-    data = spark.read.format("libsvm").load("spark_ex_data/input/spark_reg_input.txt")
+    cols_to_keep = ['american','asian','continental','indian','italian','mexican','middle_eastern','vio_facilities','vio_food_handlin','vio_hygiene','vio_vermin','total_violations','critical_violations','sev1','sev2','sev3','sev4','severity1','severity2','attempted','completed','violation','misdemeanor','felony']
+
+    df = spark.read.csv('spark_ex_data/input/merged_with_headers.csv', header=True)
+    df = df.select(*(col(c).cast("float").alias(c) for c in df.columns))
+
+    assembler = VectorAssembler(inputCols=cols_to_keep, outputCol='features')
+
+    data = assembler.transform(df).select(col('score').alias('label'), 'features')
 
     # Automatically identify categorical features, and index them.
     # Set maxCategories so features with > 4 distinct values are treated as continuous.
