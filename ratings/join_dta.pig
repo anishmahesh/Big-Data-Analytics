@@ -18,9 +18,37 @@ STORE final_311 INTO 'final_311' USING PigStorage(',');
 merged_1 = JOIN gp_crime_data by $0, gp_three_one_one_data by $0;
 merged_1 = FOREACH merged_1 GENERATE $0,FLATTEN($1);
 
+/* Merging all cab datasets*/
+cab_one = Load 'cab_1' USING PigStorage(',');
+gp_cab_one = GROUP cab_one BY $0;
+cab_one_bag = FOREACH gp_cab_one GENERATE group,$1..;
+final_cab_one = FOREACH cab_one_bag GENERATE $0,FLATTEN($1);
+final_cab_one = FOREACH final_cab_one GENERATE $0,$2..;
+STORE final_cab_one INTO 'final_cab_one' USING PigStorage(',');
+
+cab_two = Load 'cab_2' USING PigStorage(',');
+gp_cab_two = GROUP cab_two BY $0;
+cab_two_bag = FOREACH gp_cab_two GENERATE group,$1..;
+final_cab_two = FOREACH cab_two_bag GENERATE $0,FLATTEN($1);
+final_cab_two = FOREACH final_cab_two GENERATE $0,$2..;
+STORE final_cab_two INTO 'final_cab_two' USING PigStorage(',');
+
+
+merged_cab_one_two = JOIN cab_one by $0, cab_two by $0;
+merged_cab_one_two = FOREACH merged_cab_one_two GENERATE $0,FLATTEN($1);
+
+cab_three = Load 'cab_3' USING PigStorage(',');
+gp_cab_three = GROUP cab_three BY $0;
+cab_three_bag = FOREACH gp_cab_three GENERATE group,$1..;
+final_cab_three = FOREACH cab_three_bag GENERATE $0,FLATTEN($1);
+final_cab_three = FOREACH final_cab_three GENERATE $0,$2..;
+STORE final_cab_three INTO 'final_cab_three' USING PigStorage(',');
+
+merged_cab_final = JOIN merged_cab_one_two by $0, cab_three by $0;
+merged_cab_final = FOREACH merged_cab_final GENERATE $0,FLATTEN($1);
+STORE merged_cab_final INTO 'final_cab' USING PigStorage(',');
+
 
 /*
-STORE merged_1 INTO 'crime311' USING PigStorage(',');
-
-cab_data = Load 'cab' USING PigStorage(',');
+    All Datasets merge
  */
