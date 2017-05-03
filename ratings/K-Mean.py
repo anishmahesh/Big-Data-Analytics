@@ -1,6 +1,7 @@
 from __future__ import print_function
 from pyspark.ml.clustering import KMeans
 from pyspark.sql import SparkSession
+import numpy as np
 
 spark = SparkSession\
     .builder\
@@ -32,8 +33,8 @@ def createDict(point):
         center_dict[center] = []
     center_dict[center].append(point)
 
-
-dataset.rdd.map(lambda point: createDict(point))
+parsedData = dataset.map(lambda line: np.array([float(x) for x in line.split(' ')]))
+parsedData.rdd.map(lambda point: createDict(point))
 
 count = 0
 for k in sorted(center_dict, key=lambda k: len(center_dict[k]), reverse=True):
