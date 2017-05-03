@@ -1,5 +1,6 @@
 import csv
 import numpy as np
+from numpy import genfromtxt
 
 def getReadFile(read_file_name):
     return csv.reader(open(read_file_name, "r"))
@@ -7,8 +8,27 @@ def getReadFile(read_file_name):
 def getWriteFile(write_file_name):
     return open(write_file_name,'w')
 
-def create_text(csv_reader, out):
-    data = np.array(list(csv_reader)).astype("float")
+
+def cleanData(data):
+    new_data = []
+    for i in range(len(data)):
+        useRow = False
+        for col in data[i]:
+            try:
+                float(col)
+                if (35 <= float(col) <= 75):
+                    useRow = True
+            except:
+                pass
+        if(useRow):
+            new_data.append(data[i])
+    return new_data
+
+
+def create_text(out, csv_reader = None):
+    data = np.array(list(csv_reader)).astype("str")
+    #data = genfromtxt('../../RTBDA/Unique_Values/311_Cleaned_new.csv', delimiter=',')
+    data = cleanData(data)
     for i in range(len(data)):
         line = ''
         line += str(i)
@@ -22,9 +42,9 @@ def create_text(csv_reader, out):
 
 def main():
 
-    csv_reader = getReadFile(read_file_name='../../RTBDA/Unique_Values/lat_long_list.csv')
-    out = getWriteFile(write_file_name='../../RTBDA/Unique_Values/list1.txt')
-    create_text(csv_reader, out)
-
+    csv_reader = getReadFile(read_file_name='../../RTBDA/Unique_Values/311_Cleaned_new.csv')
+    out = getWriteFile(write_file_name='../../RTBDA/Unique_Values/list2.txt')
+    create_text(out, csv_reader)
+    #create_text(out)
 if __name__ == '__main__':
     main()

@@ -10,7 +10,7 @@ spark = SparkSession\
 
 spark.sparkContext.setLogLevel('ERROR')
 
-dataset = spark.read.format("libsvm").load("project/input/311_Cleaned.txt")
+dataset = spark.read.format("libsvm").load("project/input/list2.txt")
 
 kmeans = KMeans().setK(5).setSeed(1)
 model = kmeans.fit(dataset)
