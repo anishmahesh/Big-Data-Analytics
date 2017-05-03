@@ -56,7 +56,7 @@ merged_cab_final = FOREACH merged_cab_final GENERATE $0,$1,$2,$4;
 merged_external = JOIN merged_1 by $0, merged_cab_final by $0;
 merged_external = FOREACH merged_external GENERATE ..$11,$13..;
 /*STORE merged_external INTO 'merged_external' USING PigStorage(',');*/
-DUMP merged_final
+/*DUMP merged_external;*/
 
 /*
     Loading Restaurants health data
@@ -69,3 +69,12 @@ restaurants = Load 'rest' USING PigStorage(',');
 merged_final = JOIN merged_external by $0, restaurants by $1;
 merged_final = FOREACH merged_final GENERATE ..$15,$18..;
 STORE merged_final INTO 'merged_final' USING PigStorage(',');
+
+/*
+    Loading zip level Restaurant's data
+ */
+ restaurants = Load 'zip_lvl' USING PigStorage(',');
+ merged_zip = JOIN merged_external BY $0 LEFT OUTER, restaurants BY $0;
+ merged_zip = FOREACH merged_zip GENERATE ..$14,$29..;
+ STORE merged_zip INTO 'merged_zip' USING PigStorage(',');
+
