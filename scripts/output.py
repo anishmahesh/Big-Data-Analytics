@@ -2,6 +2,8 @@ import csv
 import numpy as np
 from numpy import genfromtxt
 
+On_Dumbo = True
+
 def getReadFile(read_file_name):
     return csv.reader(open(read_file_name, "r"))
 
@@ -21,6 +23,7 @@ def cleanData(data):
             except:
                 pass
         if(useRow):
+            useRow = False
             new_data.append(data[i])
     return new_data
 
@@ -41,9 +44,13 @@ def create_text(out, csv_reader = None):
     return out
 
 def main():
+    if On_Dumbo:
+        csv_reader = getReadFile('../../FinalDatasets/cab_datasets/Lat_Long_Drop.csv')
+        out = getWriteFile('../../Naman-Data/list2.txt')
+    else:
+        csv_reader = getReadFile(read_file_name='../../../RTBDA/Unique_Values/Lat_Long_Drop.csv')
+        out = getWriteFile(write_file_name='../../RTBDA/Unique_Values/list2.txt')
 
-    csv_reader = getReadFile(read_file_name='../../RTBDA/Unique_Values/311_Cleaned_new.csv')
-    out = getWriteFile(write_file_name='../../RTBDA/Unique_Values/list2.txt')
     create_text(out, csv_reader)
     #create_text(out)
 if __name__ == '__main__':
