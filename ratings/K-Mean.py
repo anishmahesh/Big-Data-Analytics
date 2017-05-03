@@ -33,8 +33,8 @@ def createDict(point):
         center_dict[center] = []
     center_dict[center].append(point)
 
-parsedData = dataset.map(lambda line: np.array([float(x) for x in line.split(' ')]))
-parsedData.rdd.map(lambda point: createDict(point))
+parsedData = dataset.rdd.map(lambda line: np.array([float(x) for x in line.split(' ')]))
+parsedData.map(lambda point: createDict(point))
 
 count = 0
 for k in sorted(center_dict, key=lambda k: len(center_dict[k]), reverse=True):
