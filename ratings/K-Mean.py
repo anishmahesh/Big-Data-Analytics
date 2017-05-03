@@ -10,7 +10,7 @@ spark = SparkSession\
 
 spark.sparkContext.setLogLevel('ERROR')
 
-dataset = spark.read.format("libsvm").load("data/mllib/sample_kmeans_data.txt")
+dataset = spark.read.format("libsvm").load("project/input/list1.txt")
 
 kmeans = KMeans().setK(5).setSeed(1)
 model = kmeans.fit(dataset)
@@ -22,5 +22,3 @@ centers = model.clusterCenters()
 print("Cluster Centers: ")
 for center in centers:
     print(center)
-
-spark.stop()
