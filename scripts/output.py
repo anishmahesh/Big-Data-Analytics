@@ -13,24 +13,19 @@ def getWriteFile(write_file_name):
 
 def cleanData(data):
     new_data = []
-    for i in range(len(data)):
-        useRow = False
-        for col in data[i]:
-            try:
-                float(col)
-                if (35 <= float(col) <= 75):
-                    useRow = True
-            except:
-                pass
-        if(useRow):
-            useRow = False
-            new_data.append(data[i])
+    for idx, row in enumerate(data, start=0):
+        try:
+            lat = float(row[0])
+            long = float(row[1])
+            if (39 <= lat <= 41 and -75 <= long <= -70):
+                new_data.append(row)
+        except:
+            pass
     return new_data
 
 
 def create_text(out, csv_reader = None):
     data = np.array(list(csv_reader)).astype("str")
-    #data = genfromtxt('../../RTBDA/Unique_Values/311_Cleaned_new.csv', delimiter=',')
     data = cleanData(data)
     for i in range(len(data)):
         line = ''
@@ -52,6 +47,5 @@ def main():
         out = getWriteFile(write_file_name='../../RTBDA/Unique_Values/list2.txt')
 
     create_text(out, csv_reader)
-    #create_text(out)
 if __name__ == '__main__':
     main()
