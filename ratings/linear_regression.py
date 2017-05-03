@@ -1,5 +1,7 @@
 from pyspark.ml.regression import LinearRegression
 from pyspark.sql import SparkSession
+from pyspark.ml.feature import VectorAssembler
+from pyspark.sql.functions import *
 
 spark = SparkSession\
     .builder\
@@ -8,7 +10,16 @@ spark = SparkSession\
 
 spark.sparkContext.setLogLevel('ERROR')
 
-training = spark.read.format("libsvm").load('spark_ex_data/input/spark_reg_input.txt')
+
+cols_to_keep = ['american','asian','continental','indian','italian','mexican','middle_eastern','vio_facilities','vio_food_handlin','vio_hygiene','vio_vermin','total_violations','critical_violations','sev1','sev2','sev3','sev4','severity1','severity2','attempted','completed','violation','misdemeanor','felony']
+
+df = spark.read.csv('spark_ex_data/input/merged_with_headers.csv', header=True)
+df = df.select(*(col(c).cast("float").alias(c) for c in df.columns))
+
+assembler = VectorAssembler(inputCols=cols_to_keep, outputCol='features')
+
+training = assembler.transform(df).select(col('score').alias('label'), 'features')
+
 train, test = training.randomSplit([0.98, 0.02])
 
 lr = LinearRegression(maxIter=10, regParam=0.01, elasticNetParam=0.0)
