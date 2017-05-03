@@ -1,3 +1,5 @@
+/*Script to generating area wise Rodent Counts as analytic*/
+
 data = LOAD 'output2' USING PigStorage(',') AS (agency:chararray, complaintType:chararray,locationType:chararray,zip:int,facilityType:chararray,lat:chararray,lng:chararray);
 rodents = FILTER data BY complaintType MATCHES 'RODENT';
 grouped_data = GROUP rodents by zip;

@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 hadoop fs -rm -r output5
 javac -classpath `yarn classpath`:. -d . *.java
 jar cvf RateIt.jar *.class
