@@ -1,7 +1,6 @@
 from __future__ import print_function
 from pyspark.ml.clustering import KMeans
 from pyspark.sql import SparkSession
-import numpy as np
 
 spark = SparkSession\
     .builder\
@@ -11,9 +10,9 @@ spark = SparkSession\
 
 spark.sparkContext.setLogLevel('ERROR')
 
-dataset = spark.read.format("libsvm").load("project/input/list1.txt")
+dataset = spark.read.format("libsvm").load("project/input/list2.txt")
 
-kmeans = KMeans().setK(40).setSeed(1)
+kmeans = KMeans().setK(5).setSeed(1)
 model = kmeans.fit(dataset)
 
 wssse = model.computeCost(dataset)
@@ -23,23 +22,3 @@ centers = model.clusterCenters()
 print("Cluster Centers: ")
 for center in centers:
     print(center)
-
-print(model)
-
-center_dict = {}
-def createDict(point):
-    center = centers[model.predict(point)]
-    if not center in center_dict:
-        center_dict[center] = []
-    center_dict[center].append(point)
-
-parsedData = dataset.rdd.map(lambda line: np.array([float(x) for x in line.split(' ')]))
-parsedData.map(lambda point: createDict(point))
-
-count = 0
-for k in sorted(center_dict, key=lambda k: len(center_dict[k]), reverse=True):
-        if not count == 5:
-            print(k +  '\t' + center_dict[k])
-        else:
-            break
-        count += 1

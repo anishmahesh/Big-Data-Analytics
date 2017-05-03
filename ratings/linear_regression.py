@@ -10,15 +10,16 @@ spark = SparkSession\
 
 spark.sparkContext.setLogLevel('ERROR')
 
+label_col = 'score'
+cols_to_keep = ['crime_sev1','crime_sev2','crime_attempted','crime_completed','violation','misdemeanor','felony','311_sev1','311_sev2','311_sev3','311_sev4','taxi1','taxi2','taxi3','american','asian','continental','indian','italian','mexican','middle_eastern','vio_facilities','vio_food_handling','vio_hygiene','vio_vermin','total_violations','critical_violations']
 
-cols_to_keep = ['american','asian','continental','indian','italian','mexican','middle_eastern','vio_facilities','vio_food_handlin','vio_hygiene','vio_vermin','total_violations','critical_violations','sev1','sev2','sev3','sev4','severity1','severity2','attempted','completed','violation','misdemeanor','felony']
-
-df = spark.read.csv('spark_ex_data/input/merged_with_headers.csv', header=True)
-df = df.select(*(col(c).cast("float").alias(c) for c in df.columns))
+df = spark.read.csv('spark_ex_data/input/FinalMerged.csv', header=True)
+df = df.select(col(label_col).alias('label'), *cols_to_keep)
+df = df.select(*(col(c).cast("double").alias(c) for c in df.columns))
 
 assembler = VectorAssembler(inputCols=cols_to_keep, outputCol='features')
 
-training = assembler.transform(df).select(col('score').alias('label'), 'features')
+training = assembler.transform(df).select('label', 'features')
 
 train, test = training.randomSplit([0.98, 0.02])
 
