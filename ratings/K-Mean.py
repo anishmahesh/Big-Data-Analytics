@@ -23,6 +23,8 @@ print("Cluster Centers: ")
 for center in centers:
     print(center)
 
+print(model)
+
 center_dict = {}
 def createDict(point):
     center = centers[model.predict(point)]
@@ -30,7 +32,8 @@ def createDict(point):
         center_dict[center] = []
     center_dict[center].append(point)
 
-dataset.map(lambda point: createDict(point))
+
+dataset.rdd.map(lambda point: createDict(point))
 
 count = 0
 for k in sorted(center_dict, key=lambda k: len(center_dict[k]), reverse=True):
