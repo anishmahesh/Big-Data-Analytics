@@ -17,7 +17,7 @@ data = spark.sparkContext.textFile("project/input/lat_long_list.txt")
 parsedData = data.map(lambda line: np.array([float(x) for x in line.split(',')]))
 
 
-clusters = KMeans.train(parsedData, 40, maxIterations=50, initializationMode="random")
+clusters = KMeans.train(parsedData, 40, maxIterations=5, initializationMode="random")
 
 def error(point):
     center = clusters.centers[clusters.predict(point)]
