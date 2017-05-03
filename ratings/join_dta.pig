@@ -67,5 +67,5 @@ restaurants = Load 'rest' USING PigStorage(',');
     Merging All datasets
  */
 merged_final = JOIN merged_external by $0, restaurants by $1;
-merged_final = FOREACH merged_final GENERATE ..$15,$17..;
+merged_final = FOREACH merged_final GENERATE ..$15,$18..;
 STORE merged_final INTO 'merged_final' USING PigStorage(',');
