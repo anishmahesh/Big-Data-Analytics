@@ -11,9 +11,10 @@ def create_text(csv_reader, out):
     data = np.array(list(csv_reader)).astype("float")
     for i in range(len(data)):
         line = ''
+        line += str(i)
         for idx, col in enumerate(data[i], start=1):
-            line = str(i) + ' ' + str(idx) + ':' + str(col) + ' ' + str(idx) + ':' + str(col)
-            line += '\n'
+            line += ' ' + str(idx) + ':' + str(col)
+        line += '\n'
         out.write(line)
     out.truncate(out.tell() - 2)
     out.close()
