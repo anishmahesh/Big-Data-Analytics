@@ -1,5 +1,5 @@
 from __future__ import print_function
-from pyspark.ml.clustering import KMeans
+from pyspark.mllib.clustering import KMeans, KMeansModel
 from pyspark.sql import SparkSession
 import numpy as np
 from math import sqrt
