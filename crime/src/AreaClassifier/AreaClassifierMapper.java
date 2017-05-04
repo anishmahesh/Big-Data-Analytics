@@ -71,7 +71,7 @@ public class AreaClassifierMapper extends Mapper<LongWritable, Text, LongWritabl
             }
         }
 
-        String csvRow = closestArea + "," + line;
+        String csvRow = line + "," + closestArea;
 
         context.write(key, new Text(csvRow));
     }
