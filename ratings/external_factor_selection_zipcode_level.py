@@ -73,4 +73,4 @@ for label_col in label_cols:
 
     print('Features selected:\n')
     for f in rf_features_selected[:len(features_selected)]:
-        print(f)
+        print(f[0], f[1])
