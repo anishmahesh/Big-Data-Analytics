@@ -52,7 +52,7 @@ for label_col in label_cols:
 
     print('Features selected:\n')
     for (feature, coeff) in features_selected:
-        print(feature, coeff)
+        print(feature, '\t', coeff)
 
 
     # Running random forest
@@ -73,4 +73,4 @@ for label_col in label_cols:
 
     print('Features selected:\n')
     for f in rf_features_selected[:len(features_selected)]:
-        print(f[0], f[1])
+        print(f[0], '\t' ,f[1])
