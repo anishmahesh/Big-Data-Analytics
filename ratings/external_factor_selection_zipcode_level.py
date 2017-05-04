@@ -34,7 +34,7 @@ assembler = VectorAssembler(inputCols=cols_to_keep, outputCol='features')
 training = assembler.transform(df).select(col(label_col).alias('label'), 'features')
 
 if model_to_use == 'linear':
-    lr = LinearRegression(maxIter=10, regParam=0.01, elasticNetParam=0.0)
+    lr = LinearRegression(maxIter=10, regParam=0.01, elasticNetParam=0.5)
     lrModel = lr.fit(training)
     trainingSummary = lrModel.summary
     print("RMSE: %f" % trainingSummary.rootMeanSquaredError)
