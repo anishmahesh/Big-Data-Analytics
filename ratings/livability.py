@@ -21,7 +21,7 @@ cols_to_keep = ['crime_sev1','crime_sev2','crime_attempted','crime_completed','v
 
 cols_to_select = cols_to_keep + label_cols
 
-df = spark.read.csv('spark_ex_data/input/MergedRestZip_with_headers.csv', header=True)
+df = spark.read.csv('spark_ex_data/input/livability_merged_with_headers.csv', header=True)
 df = df.select(*cols_to_select)
 df = df.select(*(col(c).cast("double").alias(c) for c in df.columns))
 
