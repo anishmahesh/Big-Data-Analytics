@@ -36,7 +36,7 @@ transformed = assembler.transform(df)
 for label_col in label_cols:
     training = transformed.select(col(label_col).alias('label'), 'features')
 
-    print('==========='+label_col+'=============\n')
+    print('\n\n==========='+label_col+'=============\n')
 
     # Running linear regression with elastic net
     print('\n-----Elastic Net-------\n')
