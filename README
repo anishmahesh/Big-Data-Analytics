@@ -4,37 +4,18 @@
 #	 Realtime & Big Data Analytics
 #	      CSCIGA - 3303.05
 #
-#     NYC Neighbourhood Analysis
-#              (Project)
+#	         Project
 #
-#           04, May, 2017
+#        12, April, 2017
 # @Author: avm358,sm7029,nk2239,rrm404
-#######################################
-
--------------------------------------------------------------------
-	    	              About Project
--------------------------------------------------------------------
-
-Our project aims to find the best neighbourhoods in New York City.
-Parameters that we have taken into consideration are crime data,
-311 service requests, availability of cabs and health inspection
-records of restaurants. We have also created a model which predicts
-a restaurant’s health rating in a particular location on the basis
-of these factors.
-
---------------------------------------------------------------------
-	    	                Code Flow
---------------------------------------------------------------------
+#####################################
 
 
+------------------------------------------------------------
+	    	            Files
+------------------------------------------------------------
 
-
---------------------------------------------------------------------
-	    	                   Files
---------------------------------------------------------------------
-
-
-311 -
+311-
 
 
 Restraurant -
@@ -44,6 +25,16 @@ Cabs -
 
 
 Crime -
+
+	1.	DataCleaner : Java MapReduce code to clean the data
+	
+	2. DataProcessor : Java MapReduce code to get intuition about data
+	
+	3. SeverityClaasifier : Java MapReduce code to feturize and classify data
+
+	2. AreaClassifier : Java Map Reduce to get zipcodes based on latitude and longitude
+	
+	3. Analytics : Pig code to perform analysis
 
 
 Ratings -
