@@ -15,7 +15,6 @@
 	    	            Files
 ------------------------------------------------------------
 
-
 311-
 
 
@@ -26,6 +25,16 @@ Cabs -
 
 
 Crime -
+
+	1.	DataCleaner : Java MapReduce code to clean the data
+	
+	2. DataProcessor : Java MapReduce code to get intuition about data
+	
+	3. SeverityClaasifier : Java MapReduce code to feturize and classify data
+
+	2. AreaClassifier : Java Map Reduce to get zipcodes based on latitude and longitude
+	
+	3. Analytics : Pig code to perform analysis
 
 
 Ratings -
