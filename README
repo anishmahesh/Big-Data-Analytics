@@ -4,19 +4,37 @@
 #	 Realtime & Big Data Analytics
 #	      CSCIGA - 3303.05
 #
-#	         Project
+#     NYC Neighbourhood Analysis
+#              (Project)
 #
-#        12, April, 2017
+#           04, May, 2017
 # @Author: avm358,sm7029,nk2239,rrm404
-#####################################
+#######################################
+
+-------------------------------------------------------------------
+	    	              About Project
+-------------------------------------------------------------------
+
+Our project aims to find the best neighbourhoods in New York City.
+Parameters that we have taken into consideration are crime data,
+311 service requests, availability of cabs and health inspection
+records of restaurants. We have also created a model which predicts
+a restaurant’s health rating in a particular location on the basis
+of these factors.
+
+--------------------------------------------------------------------
+	    	                Code Flow
+--------------------------------------------------------------------
 
 
-------------------------------------------------------------
-	    	            Files
-------------------------------------------------------------
 
 
-311-
+--------------------------------------------------------------------
+	    	                   Files
+--------------------------------------------------------------------
+
+
+311 -
 
 
 Restraurant -
